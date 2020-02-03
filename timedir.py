@@ -7,10 +7,8 @@ Returns a namedtuple with values for each level at time of function call.
 by J. Grant Boling [gboling]at[gmail]dot[com]
 """
 
-import time
 import datetime
 import os
-import sys
 import argparse
 
 from collections import namedtuple
