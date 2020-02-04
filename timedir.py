@@ -21,8 +21,6 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
-
 import datetime
 import os
 import argparse
@@ -105,17 +103,23 @@ def main():
     td_args = td_parser.parse_args()
     output_dir = td_args.output_dir
 
-    if td_args.scope == "year": scopelevel = 0
+    if td_args.scope == "year":
+        scopelevel = 0
 
-    elif td_args.scope == "month": scopelevel = 1
+    elif td_args.scope == "month":
+        scopelevel = 1
 
-    elif td_args.scope == "day": scopelevel = 2
+    elif td_args.scope == "day":
+        scopelevel = 2
 
-    elif td_args.scope == "hour": scopelevel = 3
+    elif td_args.scope == "hour":
+        scopelevel = 3
 
-    elif td_args.scope == "min": scopelevel = 4
+    elif td_args.scope == "min":
+        scopelevel = 4
 
-    else: scopelevel = 2
+    else:
+        scopelevel = 2
 
     nowdir(output_dir, scopelevel)
 
