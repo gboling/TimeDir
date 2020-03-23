@@ -15,8 +15,6 @@ def mk_test_dir(d):
     Path(d).mkdir(parents=True, exist_ok=True)
 
 
-# Use Path.touch to make some files in a flat directory.
-#
 def mk_mt_files(n, d):
     dp = Path(d)
     for f in range(n):

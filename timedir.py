@@ -20,65 +20,71 @@ timedir_ntuple = namedtuple('timedir', 'yearDir monthDir dayDir hourDir minDir')
 mtimedir_ntuple = namedtuple('mtimedir', 'yearDir monthDir dayDir hourDir minDir mtime mdtime')
 
 
-def nowdir(output_dir):
+# Make sure to return pathlib objects for all of these path builders.
+def nowdir(od, sl):
     now = datetime.datetime.now()
-    print now
+    print(now)
     n_year = now.strftime('%Y')
     n_month = now.strftime('%m')
     n_day = now.strftime('%d')
     n_hour = now.strftime('%H')
     n_min = now.strftime('%M')
-    od_now = PurePath(output_dir).joinpath(n_year, n_month, n_day, n_hour, n_min)
-    print od_now
-    # timedir_ntuple(*od_now)
-    # year_dir =  timedir_ntuple.n_year
-    # month_dir = timedir_ntuple.n_month
-    # day_dir = timedir_ntuple.n_day
-    # hour_dir = timedir_ntuple.n_hour
-    # min_dir = timedir_ntuple.n_min
-    # return timedir_ntuple(year_dir, month_dir, day_dir, hour_dir, min_dir)
-    return outdir_now
+    if sl == 0:
+        od_now = PurePath(od).joinpath(n_year)
+    elif sl == 1:
+        od_now = PurePath(od).joinpath(n_year, n_month)
+    elif sl == 2:
+        od_now = PurePath(od).joinpath(n_year, n_month, n_day)
+    elif sl == 3:
+        od_now = PurePath(od).joinpath(n_year, n_month, n_day, n_hour)
+    elif sl == 4:
+        od_now = PurePath(od).joinpath(n_year, n_month, n_day, n_hour, n_min)
+    else:
+        od_now = PurePath(od).joinpath(n_year, n_month, n_day)
+
+    print(od_now)
+    return od_now
 
 
-def mtimedir(mtime_file, output_dir):
-    mtime = os.path.getmtime(mtime_file)
+def mtimedir(od, sl, mtf):
+    mtime = os.path.getmtime(mtf)
     mdtime = datetime.datetime.fromtimestamp(mtime)
     m_year = mdtime.strftime('%Y')
     m_month = mdtime.strftime('%m')
     m_day = mdtime.strftime('%d')
     m_hour = mdtime.strftime('%H')
     m_min = mdtime.strftime('%M')
-    mtyear_dir = os.path.join(mtoutput_dir, m_year)
-    mtmonth_dir = os.path.join(mtyear_dir, m_month)
-    mtday_dir = os.path.join(mtmonth_dir, m_day)
-    mthour_dir = os.path.join(mtday_dir, m_hour)
-    mtmin_dir = os.path.join(mthour_dir, m_min)
+    if sl == 0:
+        od_mt = PurePath(od).joinpath(m_year)
+    if sl == 1:
+        od_mt = PurePath(od).joinpath(m_year, m_month)
+    if sl == 2:
+        od_mt = PurePath(od).joinpath(m_year, m_month, m_day)
+    if sl == 3:
+        od_mt = PurePath(od).joinpath(m_year, m_month, m_day, m_hour)
+    if sl == 4:
+        od_mt = PurePath(od).joinpath(m_year, m_month, m_day, m_hour, m_min)
+    else:
+        od_mt = PurePath(od).joinpath(m_year, m_month, m_day)
 
-    return mtimedir_ntuple(mtyear_dir, mtmonth_dir, mtday_dir, mthour_dir, mtmin_dir, mtime, mdtime)
-
-
-def get_mtime(directory):
-    for path in sorted(directory.rglob('*')):
-        depth = len(path.relative_to(directory).parts)
-        # Use a dictionary key:value for filename/mtime
-         = (f'{spacer}+ {path.name}')
-        time, file_path = max((f.stat().st_mtime, f) for f in directory.iterdir())
-        (datetime.fromtimestamp(time), file_path)
-        # adding to a dict: mydict[key] = "value"
+    return od_mt
 
 
+# def get_mtime(d):
+#     filelist = Path(d).glob('*')
+#
+#     for path in sorted(d.rglob('*')):
+#         depth = len(path.relative_to(d).parts)
+#         # Use a dictionary key:value for filename/mtime
+#          = (f'{spacer}+ {path.name}')
+#         time, file_path = max((f.stat().st_mtime, f) for f in d.iterdir())
+#         (datetime.fromtimestamp(time), file_path)
+#         adding to a dict: mydict[key] = "value"
 
 
-def make_tree(scopelevel, **kwargs):
-    if not kwargs.get('od_now') or kwargs.get('od_mt'):
-        raise noInput("No input given")
-    
-    if kwargs.get('od_now'):
-        _od_now = kwargs.get('od_now')
-        print("Creating Directories")
-        Path(_od_now).mkdir(parents=True, exist_ok=True)
-    
-
+def make_tree(od):
+    print("Creating Directories")
+    Path(od).mkdir(parents=True, exist_ok=True)
     return
 
 
@@ -109,6 +115,8 @@ def main():
     # TODO: Act on a single file or comma-separated list
     # TODO: Move a directory of files to a timedir tree
     # TODO: Load a list from a file and move those files to a timedir tree
+    # TODO: Fill a directory tree with calendar for specified period of time
+    # TODO: Require option for -f whether to copy or move
 
     td_args = td_parser.parse_args()
     output_dir = PurePath(td_args.output_dir)
@@ -131,21 +139,19 @@ def main():
     else:
         scopelevel = 2
 
-
-
     if 'td_args.td_files' in locals():
-        mtimedir_ntuple = mtimedir(td_args.td_files, output_dir)
-        make_tree(scopelevel, od_mt=)
-    elif:
-        timedir_ntuple = nowdir(output_dir)
-        make_tree(scopelevel, od_now=timedir_ntuple)
+        output_dir_mt = mtimedir(output_dir, scopelevel, td_args.td_files)
+        make_tree(output_dir_mt)
+    else:
+        output_dir_nd = nowdir(output_dir, scopelevel)
+        make_tree(output_dir_nd)
 
     return
 
 
 if __name__ == '__main__':
-    try:
-        main()
-    except noInput as msg:
-        print msg
-
+    main()
+    # try:
+    #     main()
+    # except noInput as msg:
+    #     print(msg)
