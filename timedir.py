@@ -14,10 +14,7 @@ import os
 import argparse
 
 from pathlib import Path, PurePath
-from collections import namedtuple
 
-timedir_ntuple = namedtuple('timedir', 'yearDir monthDir dayDir hourDir minDir')
-mtimedir_ntuple = namedtuple('mtimedir', 'yearDir monthDir dayDir hourDir minDir mtime mdtime')
 
 
 # Make sure to return pathlib objects for all of these path builders.
@@ -56,13 +53,13 @@ def mtimedir(od, sl, mtf):
     m_min = mdtime.strftime('%M')
     if sl == 0:
         od_mt = PurePath(od).joinpath(m_year)
-    if sl == 1:
+    elif sl == 1:
         od_mt = PurePath(od).joinpath(m_year, m_month)
-    if sl == 2:
+    elif sl == 2:
         od_mt = PurePath(od).joinpath(m_year, m_month, m_day)
-    if sl == 3:
+    elif sl == 3:
         od_mt = PurePath(od).joinpath(m_year, m_month, m_day, m_hour)
-    if sl == 4:
+    elif sl == 4:
         od_mt = PurePath(od).joinpath(m_year, m_month, m_day, m_hour, m_min)
     else:
         od_mt = PurePath(od).joinpath(m_year, m_month, m_day)
@@ -151,7 +148,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # try:
-    #     main()
-    # except noInput as msg:
-    #     print(msg)
