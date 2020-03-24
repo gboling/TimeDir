@@ -12,6 +12,7 @@
 import datetime
 import os
 import argparse
+import shutil
 
 from pathlib import Path, PurePath
 
@@ -86,7 +87,9 @@ def make_tree(od):
 
 
 def main():
-    td_parser = argparse.ArgumentParser(description='Make a directory tree for year-month-day-hour-minute.')
+    td_parser = argparse.ArgumentParser(description='Make a directory tree for year-month-day-hour-minute.',
+                                        epilog='Extra info here.', fromfile_prefix_chars='@'
+                                        )
     td_parser.add_argument('output_dir',
                            default=Path.cwd(),
                            help="Specify the base directory for the output."
@@ -104,9 +107,9 @@ def main():
                            )
     td_parser.add_argument('-f', '--file',
                            dest="td_files",
-                           help="Specify a file, directory, or comma-separated list" +
+                           help="Specify a file or directory" +
                                 "to organize in a timedir tree by last modified time.",
-                           nargs='*'
+                           # nargs='1'
                            )
 
     # TODO: Act on a single file or comma-separated list
@@ -136,9 +139,25 @@ def main():
     else:
         scopelevel = 2
 
-    if 'td_args.td_files' in locals():
-        output_dir_mt = mtimedir(output_dir, scopelevel, td_args.td_files)
-        make_tree(output_dir_mt)
+    if td_args.td_files is not None:
+        print("Checking file input")
+        pfiles = Path(td_args.td_files).glob('*')
+        print(pfiles)
+        for pfile in pfiles:
+            # pfile = Path(file)
+            print(pfile)
+            if Path.is_file(pfile):
+                print("It's a file.")
+                output_dir_mt = mtimedir(output_dir, scopelevel, pfile)
+                make_tree(output_dir_mt)
+                shutil.move(str(pfile), str(output_dir_mt))
+            elif Path.is_dir(pfile):
+                print("It's a directory")
+                for child in Path.iterdir(pfile):
+                    output_dir_mt = mtimedir(output_dir, scopelevel, child)
+                    make_tree(output_dir_mt)
+                    shutil.move(str(child), str(output_dir_mt))
+
     else:
         output_dir_nd = nowdir(output_dir, scopelevel)
         make_tree(output_dir_nd)
