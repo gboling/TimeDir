@@ -22,7 +22,7 @@ VERSION = '0.2.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    # 'requests', 'maya', 'records',
+     'datetime', 'os', 'argparse','shutil'
 ]
 
 # What packages are optional?
