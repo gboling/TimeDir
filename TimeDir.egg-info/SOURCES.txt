@@ -4,4 +4,5 @@ timedir.py
 TimeDir.egg-info/PKG-INFO
 TimeDir.egg-info/SOURCES.txt
 TimeDir.egg-info/dependency_links.txt
+TimeDir.egg-info/requires.txt
 TimeDir.egg-info/top_level.txt

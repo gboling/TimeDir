@@ -2,7 +2,14 @@
 /venv*
 /.idea
 .pypirc
+<<<<<<< HEAD
 /venv
 /TimeDir.egg-info
 /build
 /dist
+=======
+/.idea/
+/build/
+/dist/
+/TimeDir.egg-info/
+>>>>>>> 688133803c0eb4506ed5e36fef4072d08c3f9292

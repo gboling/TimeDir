@@ -17,12 +17,12 @@ DESCRIPTION = 'Creates a directory tree based on the date [year/month/day/hour/m
 URL = 'https://github.com/gboling/TimeDir'
 EMAIL = 'gboling@gmail.com'
 AUTHOR = 'J. Grant Boling'
-REQUIRES_PYTHON = '>=2.7.0'
-VERSION = '0.1.0'
+REQUIRES_PYTHON = '>=3.5.0'
+VERSION = '0.2.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    # 'requests', 'maya', 'records',
+     'datetime', 'os', 'argparse','shutil'
 ]
 
 # What packages are optional?
