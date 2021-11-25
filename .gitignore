@@ -2,3 +2,7 @@
 /venv*
 /.idea
 .pypirc
+/venv
+/TimeDir.egg-info
+/build
+/dist
