@@ -12,4 +12,5 @@
 /build/
 /dist/
 /TimeDir.egg-info/
+.venv
 >>>>>>> 688133803c0eb4506ed5e36fef4072d08c3f9292

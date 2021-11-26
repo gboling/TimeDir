@@ -142,9 +142,9 @@ def main():
     # TODO: Fill a directory tree with calendar for specified period of time
     # TODO: Add option to copy instead of move
 
+    global verbose, scopelevel, output_dir
     td_args = td_parser.parse_args()
     output_dir = PurePath(td_args.output_dir)
-    global verbose, scopelevel, output_dir
     if td_args.verbose:
         verbose = True
     else:
