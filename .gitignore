@@ -13,4 +13,5 @@
 /dist/
 /TimeDir.egg-info/
 .venv
+/__pycache__/
 >>>>>>> 688133803c0eb4506ed5e36fef4072d08c3f9292
